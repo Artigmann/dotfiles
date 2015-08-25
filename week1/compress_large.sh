@@ -1,10 +1,15 @@
 #!/bin/bash
-if [ $# -ne 2 ]; then
-	echo "USAGE: $0 [dir path] [filesize (kB)]"
+if [[ "$1" == "-h" || "$1" == "--help" || $# -eq 0 ]]; then
+	# Help message
+	echo "USAGE: $0 [dir] [filesize (kB)]"
+	echo "Compresses all files over given filesize in given tree"
 	exit
-fi
-
-if [ ! -d $1 ]; then
+elif [ $# -ne 2 ]; then
+	# Wrong number of arguments
+	echo "Wrong number of arguments, see help with -h flag!" 1>&2
+	exit
+elif [ ! -d $1 ]; then
+	# Not a dir
 	echo "$1 is not a directory!" 1>&2
 	exit
 fi
@@ -14,3 +19,4 @@ files=$(find $1 -size +${2}k)
 for file in $files; do
 	gzip $file
 done
+
