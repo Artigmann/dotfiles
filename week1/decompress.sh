@@ -14,8 +14,4 @@ elif [ ! -d $1 ]; then
 	exit
 fi
 
-files=$(find $1 -name *.gz)
-
-for file in $files; do
-	gunzip $file
-done
+find $1 -name *.gz -exec gunzip {} \;
