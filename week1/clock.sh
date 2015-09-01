@@ -2,7 +2,7 @@
 
 function ctrl_c {
 	# SIGINT handler
-	echo "Bye bye"
+	echo -e "\nBye bye"
 	exit
 }
 
