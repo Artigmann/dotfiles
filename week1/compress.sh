@@ -14,9 +14,4 @@ elif [ ! -d $1 ]; then
 	exit
 fi
 
-files=$(find $1 -size +${2}k)
-
-for file in $files; do
-	gzip $file
-done
-
+find $1 -size +${2}k -exec gzip {} \;
