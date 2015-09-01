@@ -1,9 +1,12 @@
 #!/usr/bin/env python
+"""
+Prints temperature given in fahrenheit as celsius.
+"""
 
 import sys
 
 if len(sys.argv) < 2:
-    print "USAGE: python {0} [FAHRENHEIT]".format(sys.argv[0])
+    print "USAGE: python {0} FAHRENHEIT".format(sys.argv[0])
     print "Converts temperature in fahrenheit to temperature in celsius."
     sys.exit()
 

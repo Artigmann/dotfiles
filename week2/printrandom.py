@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Prints random uniform number from -1 to 1.
+"""
 
 from random import uniform
 
