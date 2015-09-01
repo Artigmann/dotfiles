@@ -6,6 +6,7 @@ Prints temperature given in fahrenheit as celsius.
 import sys
 
 if len(sys.argv) < 2:
+    # No arguments, print help.
     print "USAGE: python {0} FAHRENHEIT".format(sys.argv[0])
     print "Converts temperature in fahrenheit to temperature in celsius."
     sys.exit()
