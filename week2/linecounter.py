@@ -21,7 +21,7 @@ for filename in sys.argv[1:]:
 
     # Iterate through lines and increment counter
     lines = 0
-    while file.readline():
+    for _ in file:
         lines += 1
     print "{0}: {1}".format(filename, lines)
     file.close()

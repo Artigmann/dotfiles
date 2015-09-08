@@ -21,11 +21,7 @@ for filename in sys.argv[1:]:
 
     # Iterate through lines and increment counter per word
     wordcount = 0
-    while True:
-        line = file.readline()
-        if not line:
-            # Empty line means eof, break loop.
-            break
+    for line in file:
         words = line.split()
         for _ in words:
             wordcount += 1
