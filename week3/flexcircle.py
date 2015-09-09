@@ -5,7 +5,7 @@ and zero radius. Area and circumference needs to be zero or higher. We use
 instance checking of numbers given as argument, even though it's perhaps
 less pythonesque.
 
-Should check if what values are reasonable for radius.
+Should check what values are reasonable for radius.
 """
 
 from numbers import Number
