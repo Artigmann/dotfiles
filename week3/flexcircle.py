@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 """
-Basic circle module with several attributes using properties. We allow negative
-and zero radius. Area and circumference needs to be zero or higher. We use
-instance checking of numbers given as argument, even though it's perhaps
-less pythonesque.
-
-Should check what values are reasonable for radius.
+Basic circle module with attributes and properties. We
 """
 
 from numbers import Number
@@ -21,19 +16,16 @@ class FlexCircle(object):
         Constructor, takes a radius as a Number or raises a ValueError if not
         a number.
         """
-        if isinstance(radius, Number):
-            self.__radius = radius
-        else:
-            raise ValueError("Radius needs to be a number")
+        self.radius = radius
 
     def set_radius(self, radius):
         """
-        Sets radius with given number or throws ValueError if not a number.
+        Sets radius of circle. Radius needs to be a positive number.
         """
-        if isinstance(radius, Number):
+        if radius > 0:
             self.__radius = radius
         else:
-            raise ValueError("Radius needs to be a number")
+            raise ValueError("Radius needs to be positive.")
 
     def get_radius(self):
         """
@@ -43,13 +35,12 @@ class FlexCircle(object):
 
     def set_area(self, area):
         """
-        Sets area with given zero or higher number or throws ValueError if area
-        fails to conform to this.
+        Sets radius of circle based on area. Area needs to be a positive number.
         """
-        if isinstance(area, Number) and area >= 0:
+        if area > 0:
             self.__radius = sqrt(area/pi)
         else:
-            raise ValueError("Area needs to be a number that is 0 or higher")
+            raise ValueError("Area needs to be positive.")
 
     def get_area(self):
         """
@@ -59,14 +50,12 @@ class FlexCircle(object):
 
     def set_perimeter(self, perimeter):
         """
-        Sets perimeter given argument, argument has to be a number that is 0 or
-        higher or ValueError is raised.
+        Sets radius of circle based on perimeter. Perimeter needs to be a positive number.
         """
-        if isinstance(perimeter, Number) and perimeter >= 0:
+        if perimeter > 0:
             self.__radius = perimeter/(2*pi)
         else:
-            raise ValueError("Perimeter needs to be a number that is 0 or " +
-                             "higher")
+            raise ValueError("Perimeter needs to be positive.")
 
     def get_perimeter(self):
         """
