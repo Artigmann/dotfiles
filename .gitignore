@@ -1,5 +1,3 @@
 *.pyc
-test_*.py
 *.tar
 *.tar.gz
-run_tests.py
