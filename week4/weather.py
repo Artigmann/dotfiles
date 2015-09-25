@@ -3,6 +3,7 @@
 from urllib import urlopen
 from time import strptime
 import re
+import lazybuf
 
 
 def get_url(url):
@@ -12,16 +13,20 @@ def get_url(url):
     return urlopen(url).read().decode("utf-8")  # TODO: check encoding.
 
 
-# TODO: Limit to maximum of 100?
-def find_location_links(location):
+def find_locations_yr_no(location):
     """
-    Returns a list of XML links matching either stedsnavn, kommune or fylke in
+    Returns a list of (max 100) XML links matching either stedsnavn, kommune or fylke in
     that order. Supports the typical command-line wildcard.
     """
-    # Escape the user given string and replace wildcards with .*
-    search = re.sub("\\\\\*", "(?:\S| )*", re.escape(location))
+    if location:
+        # Escape the user given string and replace wildcards with .*
+        search = re.sub("\\\\\*", "(?:\S| )*", re.escape(location))
+    else:
+        # Wildcard if there's no location string.
+        search = r"(?:\S| )*"
 
-    content = get_url("http://fil.nrk.no/yr/viktigestader/noreg.txt")
+    fetch = lazybuf.LazyBuf(get_url, "http.buf")
+    content = fetch("http://fil.nrk.no/yr/viktigestader/noreg.txt")
 
     re_opener = r"^\d+\t"
     re_kommune = r"(?:\S| )+\t\d+\t(?:\S| )+\t(?:\S| )+\t(?:\S| )+\t"
@@ -29,22 +34,25 @@ def find_location_links(location):
 
     # Find stadnamn
     links = re.findall(re_opener + search + re_xml, content, re.M)
-    if links:
-        return links
+    if not links:
+        # No stadnamn, find kommune
+        links = re.findall(re_opener + re_kommune + search + re_xml, content, re.M)
+        if not links:
+            # No kommune, find fylke
+            links = re.findall(re_opener + re_kommune + r"(?:\S| )+\t" + search +
+                             re_xml, content, re.M)
 
-    # If not stadnamn, find kommune
-    links = re.findall(re_opener + re_kommune + search + re_xml, content, re.M)
-    if links:
-        return links
+    unique_links = []
+    [unique_links.append(x) for x in links if x not in unique_links]
+    return unique_links[0:100]
 
-    # If not kommune, find fylke
-    return re.findall(re_opener + re_kommune + r"(?:\S| )+\t" + search +
-                      re_xml, content, re.M)
 
 
 # TODO: Check if we need to add decode to strings.
+#       Perhaps limit everything to the next 24 hours?
 def fetch_forecasts(url):
-    content = get_url(url)
+    fetch = lazybuf.LazyBuf(get_url, "http.buf")
+    content = fetch(url)
 
     name = re.search(r"\<name\>(.*)\<\/name\>", content).group(1)
     re_timestamp = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"
