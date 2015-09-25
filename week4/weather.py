@@ -12,6 +12,7 @@ def get_url(url):
     return urlopen(url).read().decode("utf-8")  # TODO: check encoding.
 
 
+# TODO: Limit to maximum of 100?
 def find_location_links(location):
     """
     Returns a list of XML links matching either stedsnavn, kommune or fylke in
@@ -19,6 +20,7 @@ def find_location_links(location):
     """
     # Escape the user given string and replace wildcards with .*
     search = re.sub("\\\\\*", "(?:\S| )*", re.escape(location))
+
     content = get_url("http://fil.nrk.no/yr/viktigestader/noreg.txt")
 
     re_opener = r"^\d+\t"
@@ -41,44 +43,36 @@ def find_location_links(location):
 
 
 # TODO: Check if we need to add decode to strings.
-def get_weather_data(url):
+def fetch_forecasts(url):
     content = get_url(url)
 
     name = re.search(r"\<name\>(.*)\<\/name\>", content).group(1)
     re_timestamp = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"
-    re_time = r"<time from\=\"(" + re_timestamp + r")\"\s*?to\=\"(" \
+    re_time = r"<time.*?from\=\"(" + re_timestamp + r")\".*?to\=\"(" \
               + re_timestamp + r")\".*?>"
     re_symbol_name = r"<symbol.*?name\=\"(.*?)\".*?\/>"
-    re_precipitation = r"<precipitation value=\"(\d+)\".*?\/>"
-    re_temperature = r"<temperature.*?value\=\"(\d+)\".*?\/>"
+    re_precipitation = r"<precipitation.*?value=\"(.*?)\".*?\/>"
+    re_windspeed = r"<windSpeed.*?mps\=\"(.*?)\".*?\/>"
+    re_temperature = r"<temperature.*?value\=\"(.*?)\".*?\/>"
+    re_ending = r".*?<\/time>"
     re_all = re_time + r".*?" + re_symbol_name + r".*?" + re_precipitation \
-                     + r".*?" + re_temperature
+                     + r".*?" + re_windspeed + r".*?" + re_temperature \
+                     + re_ending
 
     data = re.findall(re_all, content, re.S)
-    forecast = Forecast(name)
     time_str = "%Y-%m-%dT%H:%M:%S"
+    lst = []
     for f in data:
         time_from = strptime(f[0], time_str)
         time_to = strptime(f[1], time_str)
         symbol = f[2]
-        precipitation = int(f[3])
-        temperature = int(f[4])
-        forecast.add(time_from, time_to, symbol, precipitation, temperature)
+        precipitation = float(f[3])
+        windspeed = float(f[4])
+        temperature = int(f[5])
+        lst.append([time_from, time_to, symbol, precipitation, windspeed,
+                    temperature])
 
-    return forecast
-
-
-class Forecast(object):
-    def __init__(self, place):
-        """
-        Takes place as name of place the forecast is for.
-        """
-        self.place = place
-        self._lst = []  # TODO: Should we use an inner class instead?
-
-    def add(self, time_from, time_to, symbol, precipitation, temperature):
-        self._lst.append([time_from, time_to, symbol, precipitation,
-                         temperature])
+    return (name, lst)
 
 
 if __name__ == "__main__":
