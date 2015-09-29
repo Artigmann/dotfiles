@@ -3,8 +3,18 @@
 from urllib import urlopen
 from time import strptime
 import re
-import lazybuf
+import weathercache
 
+re_name = re.compile(r"<name>(.*?)<\/name>");
+re_forecast = re.compile(r"""
+        <time .*? from\=\" (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}) \" # from timestamp
+        .*? to\=\" (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}) \" .*? >   # to timestamps
+        .*?<symbol .*? name\=\" (.*?) \" .*? \/>                    # symbol name
+        .*?<precipitation .*? value\=\" (.*?) \" .*? \/>            # precipitation value
+        .*?<windSpeed .*? mps\=\" (.*?) \" .*? \/>                  # windspeed (mps)
+        .*?<temperature .*? value\=\" (.*?) \" .*? \/>              # temperature value
+        .*?<\/time>
+        """, re.DOTALL | re.VERBOSE)
 
 def get_url(url):
     """
@@ -25,7 +35,7 @@ def find_locations_yr_no(location):
         # Wildcard if there's no location string.
         search = r"(?:\S| )*"
 
-    fetch = lazybuf.LazyBuf(get_url, "http.buf")
+    fetch = weathercache.WeatherCache(get_url)
     content = fetch("http://fil.nrk.no/yr/viktigestader/noreg.txt")
 
     re_opener = r"^\d+\t"
@@ -51,24 +61,18 @@ def find_locations_yr_no(location):
 # TODO: Check if we need to add decode to strings.
 #       Perhaps limit everything to the next 24 hours?
 def fetch_forecasts(url):
-    fetch = lazybuf.LazyBuf(get_url, "http.buf")
+    fetch = weathercache.WeatherCache(get_url)
     content = fetch(url)
 
-    name = re.search(r"\<name\>(.*)\<\/name\>", content).group(1)
-    re_timestamp = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"
-    re_time = r"<time.*?from\=\"(" + re_timestamp + r")\".*?to\=\"(" \
-              + re_timestamp + r")\".*?>"
-    re_symbol_name = r"<symbol.*?name\=\"(.*?)\".*?\/>"
-    re_precipitation = r"<precipitation.*?value=\"(.*?)\".*?\/>"
-    re_windspeed = r"<windSpeed.*?mps\=\"(.*?)\".*?\/>"
-    re_temperature = r"<temperature.*?value\=\"(.*?)\".*?\/>"
-    re_ending = r".*?<\/time>"
-    re_all = re_time + r".*?" + re_symbol_name + r".*?" + re_precipitation \
-                     + r".*?" + re_windspeed + r".*?" + re_temperature \
-                     + re_ending
+    #name = re.search(r"\<name\>(.*)\<\/name\>", content).group(1)
+    name = re.search(re_name, content).group(1)
+    print "Name: " + name
 
-    data = re.findall(re_all, content, re.S)
+    data = re.findall(re_forecast, content)
+    print "Data found."
     time_str = "%Y-%m-%dT%H:%M:%S"
+
+    # List comprehension should be here instead
     lst = []
     for f in data:
         time_from = strptime(f[0], time_str)
@@ -84,4 +88,5 @@ def fetch_forecasts(url):
 
 
 if __name__ == "__main__":
-    find_location_links()
+    print "lol, no main"
+    # find_location_links()
