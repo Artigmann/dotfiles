@@ -22,3 +22,5 @@ export PATH=$PATH:/opt/bin
 # uio
 alias sshuio='ssh -YC anderjaa@login.ifi.uio.no'
 alias uiofiler='sshfs anderjaa@login.ifi.uio.no: ~/Documents/uio-home -o reconnect,modules=iconv,from_code=utf8'
+
+#test
