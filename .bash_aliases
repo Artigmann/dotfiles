@@ -24,3 +24,4 @@ alias sshuio='ssh -YC anderjaa@login.ifi.uio.no'
 alias uiofiler='sshfs anderjaa@login.ifi.uio.no: ~/Documents/uio-home -o reconnect,modules=iconv,from_code=utf8'
 
 #test
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
