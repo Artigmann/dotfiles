@@ -2,6 +2,7 @@
 # encoding: utf-8
 from urllib import urlopen
 from datetime import datetime, timedelta
+from collections import namedtuple
 import re
 import weathercache
 
@@ -52,6 +53,8 @@ def find_location_links(location):
             links = re.findall(re_opener + re_kommune + r"(?:\S| )+\t" + search +
                              re_xml, content, re.M)
 
+    # Need to make the links unique, this is a fancy-ish of getting unique
+    # links semi-fast while retaining order.
     unique_links = []
     [unique_links.append(x) for x in links if x not in unique_links]
     return unique_links[0:100]
@@ -78,11 +81,13 @@ def fetch_forecasts(url):
     print "Data found."
     time_str = "%Y-%m-%dT%H:%M:%S"
 
-    lst = [[datetime.strptime(i[0], time_str), datetime.strptime(i[1], time_str), i[2], float(i[3]), float(i[4]), int(i[5])] for i in data]
+    Forecast = namedtuple("Forecast", ["time_from", "time_to", "symbol", "precipitation", "windspeed", "temperature"])
+    lst = [Forecast(datetime.strptime(i[0], time_str), datetime.strptime(i[1], time_str), i[2], float(i[3]), float(i[4]), int(i[5])) for i in data]
     return (name, lst)
 
+
 def weather_update(location, hour, minute):
-    location = location.decode("utf-8") # TODO: Fix encoding.
+    location = location.decode("utf-8")  # TODO: Fix encoding.
     links = find_location_links(location)
 
     next_slot = datetime.now().replace(minute=0) + timedelta(hours=1)
@@ -99,16 +104,9 @@ def weather_update(location, hour, minute):
         #    target_time += timedelta(day=1)
 
         for f in forecasts[1]:
-            time_from = f[0]
-            time_to = f[1]
-            symbol = f[2]
-            precipitation = f[3]
-            windspeed = f[4]
-            temperature = f[5]
-
-            if target_time >= time_from and target_time < time_to:
+            if target_time >= f.time_from and target_time < f.time_to:
                 string += "{}: {}, rain:{:.1f} mm, wind:{:.1f} mps, temp:{} deg C\n" \
-                           .format(name, symbol, precipitation, windspeed, temperature)
+                           .format(name, f.symbol, f.precipitation, f.windspeed, f.temperature)
                 break
     return string
 
