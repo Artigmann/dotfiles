@@ -230,7 +230,7 @@
 
   ; Abbrevation expansion
   (abbrev-mode 1)
- 
+
   (defun casey-header-format ()
      "Format the given file as a header file."
      (interactive)
@@ -606,7 +606,8 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize) ;; You might already have this line
  (load-theme 'wombat t)
-(load-theme 'sanityinc-tomorrow-night t)
+;; (load-theme 'sanityinc-tomorrow-night t)
+(load-theme 'sanityinc-solarized-dark t)
  ;; REMOVE FUCKING BELL SHIT
 (setq ring-bell-function 'ignore)
 
@@ -660,7 +661,7 @@ point."
   (add-hook 'java-mode-hook          'my-tab-fix)
   (add-hook 'python-mode-hook          'my-tab-fix)
   (add-hook 'text-mode-hook          'my-tab-fix)
-
+(set-foreground-color "#BABDB6")
   
   (defadvice show-paren-function
       (after show-matching-paren-offscreen activate)
