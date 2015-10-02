@@ -16,3 +16,6 @@ python weather.py STEDSNAVN TIME MINUTT
 ``` bash
 python extreme.py
 ```
+
+## Bruk av API
+API i weather.py skal være OK dokumentert og mulig å bruke til hva enn man ønsker, innenfor rimelighetens grenser.
