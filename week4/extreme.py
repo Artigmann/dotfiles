@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import weather
+from yr_weather import weather
 import re
 
 if __name__ == "__main__":

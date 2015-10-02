@@ -3,10 +3,10 @@
 import cPickle as pickle
 import os
 import errno
-import string
 from datetime import datetime, timedelta
 
 CACHE_PATH = "weatherbuf/"
+
 
 class WeatherBuf:
     """
@@ -29,7 +29,8 @@ class WeatherBuf:
             os.mkdir(CACHE_PATH)
 
         if not os.path.isdir(CACHE_PATH):
-            raise EnvironmentError(errno.ENOTDIR, CACHE_PATH + " is not a directory!")
+            raise EnvironmentError(errno.ENOTDIR, CACHE_PATH +
+                                   " is not a directory!")
 
     def __call__(self, arg):
         # If timestamp is set we use it, if not we use current system time.
@@ -38,7 +39,9 @@ class WeatherBuf:
         else:
             cur_time = datetime.now()
 
-        filename = CACHE_PATH + "".join([c for c in arg if c.isalpha() or c.isdigit()]).rstrip() + ".tmp"
+        filename = CACHE_PATH + \
+            "".join([c for c in arg if c.isalpha() or c.isdigit()]) \
+            .rstrip() + ".tmp"
 
         if os.path.exists(filename):
             # File exists, check if it matches the time requirements.
@@ -50,7 +53,8 @@ class WeatherBuf:
             elif file_time.hour < 18:
                 valid_to = file_time.replace(hour=18, minute=0, second=0)
             else:
-                valid_to = file_time.replace(hour=0, minute=0, second=0) + timedelta(days=1)
+                valid_to = file_time.replace(hour=0, minute=0, second=0) + \
+                           timedelta(days=1)
 
             if cur_time < valid_to:
                 with open(filename, "rb") as f:
