@@ -607,7 +607,7 @@
 (package-initialize) ;; You might already have this line
  (load-theme 'wombat t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
-(load-theme 'sanityinc-solarized-dark t)
+(load-theme 'solarized t)
  ;; REMOVE FUCKING BELL SHIT
 (setq ring-bell-function 'ignore)
 
@@ -661,6 +661,7 @@ point."
   (add-hook 'java-mode-hook          'my-tab-fix)
   (add-hook 'python-mode-hook          'my-tab-fix)
   (add-hook 'text-mode-hook          'my-tab-fix)
+
 (set-foreground-color "#BABDB6")
   
   (defadvice show-paren-function
