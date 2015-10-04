@@ -11,7 +11,7 @@ yr.no too much) at the next 13:00.
 As a note it would probably be easier to just use the weather data given by
 fetch_forecast(), however this also works.
 """
-from yr_weather import weather
+import weather
 import re
 
 if __name__ == "__main__":
