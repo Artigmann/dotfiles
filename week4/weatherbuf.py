@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
+"""
+Module containing class WeatherBuf, a buffer for saving data recieved from
+yr.no.
+"""
 import cPickle as pickle
 import os
 import errno
@@ -39,6 +43,7 @@ class WeatherBuf:
         else:
             cur_time = datetime.now()
 
+        # Convert URL to filename.
         filename = CACHE_PATH + \
             "".join([c for c in arg if c.isalpha() or c.isdigit()]) \
             .rstrip() + ".tmp"
@@ -61,9 +66,11 @@ class WeatherBuf:
                     return pickle.load(f)
 
         retval = self.func(arg)
-        with open(filename, "wb") as f:
-            pickle.dump(retval, f)
-        if self.timestamp:
-            # If timestamp is set we will modify the mtime.
-            os.utime(filename, (self.timestamp, self.timestamp))
+        if retval:
+            # Only update file if we actually recieve content.
+            with open(filename, "wb") as f:
+                pickle.dump(retval, f)
+            if self.timestamp:
+                # If timestamp is set we will modify the mtime.
+                os.utime(filename, (self.timestamp, self.timestamp))
         return retval

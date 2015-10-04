@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
+"""
+Module to fetch and parse data from yr.no. Can also be run with the following
+arguments to fetch a specific forecast:
+`python weather.py LOCATION HOUR MINUTE`
+"""
 from urllib import urlopen
 from datetime import datetime, timedelta
 from collections import namedtuple
@@ -34,15 +39,20 @@ re_forecast = re.compile(r"""
 
 def get_url(url):
     """
-    Returns content at given URL.
+    Returns content at given URL as string.
     """
-    return urlopen(url).read().decode("utf-8")
+    try:
+        content = urlopen(url).read().decode("utf-8")
+    except:
+        return None
+    return content
 
 
 def find_location_links(location):
     """
-    Returns a list of (max 100) XML links matching either stedsnavn, kommune or
-    fylke in that order. Supports the typical command-line wildcard.
+    Returns a list of (max 100) XML links with location matching either
+    stedsnavn, kommune or fylke in that order. Supports the typical
+    command-line wildcard.
     """
     if location:
         # Escape the user given string and replace wildcards with .*
@@ -53,6 +63,9 @@ def find_location_links(location):
 
     fetch = weatherbuf.WeatherBuf(get_url)
     content = fetch("http://fil.nrk.no/yr/viktigestader/noreg.txt")
+    if not content:
+        sys.stderr.write("Failed to retrieve index file (noreg.txt)\n")
+        return None
 
     re_opener = r"^\d+\t"
     re_kommune = r"(?:\S| )+\t\d+\t(?:\S| )+\t(?:\S| )+\t(?:\S| )+\t"
@@ -78,19 +91,22 @@ def find_location_links(location):
 
 def fetch_forecasts(url):
     """
-    Finds forecasts from given XML-file URL. Returns a tuple containing name
-    and a list of named tuples with time_from, time_to, symbol, precipitation,
-    windspeed and temperature.
+    Finds forecasts from given XML-file URL. Returns a tuple containing both
+    name and a list of named tuples with time_from, time_to, symbol,
+    precipitation, windspeed and temperature. Returns None if we fail to get
+    URL or if content obviously doesn't match the requested XML-file.
     """
     url = url.encode("utf-8")
     fetch = weatherbuf.WeatherBuf(get_url)
     content = fetch(url)
     if not content:
-        return
+        sys.stderr.write("Failed to retrieve URL: {}\n".format(url))
+        return None
 
     name_match = re.search(re_name, content)
     if not name_match:
-        return
+        sys.stderr.write("Failed to parse data from URL: {}\n".format(url))
+        return None
     else:
         name = name_match.group(1)
 
@@ -108,12 +124,14 @@ def fetch_forecasts(url):
 def weather_update(location, hour, minute):
     """
     Gets weather forecast for given location at given time within the next
-    24 hours. Supports a normal command-line wildcard.
+    24 hours. Location is the location we want the forecast for, this supports
+    the typical command line wildcard. Hour and minute are the hour and the
+    minute we want the forecast for. Returns a string containing the forecast.
     """
-    location = location.decode("utf-8")  # TODO: Fix encoding.
+    location = location.decode("utf-8")
     links = find_location_links(location)
     if not links:
-        return "Location \"{}\" not found.".format(location)
+        return "Location \"{}\" not found.".format(location.encode("utf-8"))
 
     next_slot = datetime.now().replace(minute=0) + timedelta(hours=1)
     target_time = datetime.now().replace(hour=hour, minute=minute)
