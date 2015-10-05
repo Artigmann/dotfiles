@@ -556,6 +556,9 @@
  '(auto-save-timeout 0)
  '(auto-show-mode t t)
  '(blink-cursor-mode nil)
+ '(custom-safe-themes
+   (quote
+    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(delete-auto-save-files nil)
  '(delete-old-versions (quote other))
  '(display-time-mode t)
@@ -607,7 +610,8 @@
 (package-initialize) ;; You might already have this line
  (load-theme 'wombat t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
-(load-theme 'solarized t)
+(load-theme 'solarized-light t)
+(setq solarized-high-contrast-mode-line t)
  ;; REMOVE FUCKING BELL SHIT
 (setq ring-bell-function 'ignore)
 
@@ -662,7 +666,7 @@ point."
   (add-hook 'python-mode-hook          'my-tab-fix)
   (add-hook 'text-mode-hook          'my-tab-fix)
 
-(set-foreground-color "#BABDB6")
+(set-foreground-color "#2E3436")
   
   (defadvice show-paren-function
       (after show-matching-paren-offscreen activate)
@@ -675,3 +679,9 @@ point."
                                  (char-equal (char-syntax cb) ?\) )
                                  (blink-matching-open))))
         (when matching-text (message matching-text))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
