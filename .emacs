@@ -608,10 +608,9 @@
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize) ;; You might already have this line
- (load-theme 'wombat t)
+(load-theme 'wombat t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
-(load-theme 'solarized-light t)
-(setq solarized-high-contrast-mode-line t)
+(load-theme 'sanityinc-tomorrow-eighties t)
  ;; REMOVE FUCKING BELL SHIT
 (setq ring-bell-function 'ignore)
 
@@ -666,7 +665,7 @@ point."
   (add-hook 'python-mode-hook          'my-tab-fix)
   (add-hook 'text-mode-hook          'my-tab-fix)
 
-(set-foreground-color "#2E3436")
+(set-foreground-color "#D3D7CF")
   
   (defadvice show-paren-function
       (after show-matching-paren-offscreen activate)
