@@ -610,7 +610,7 @@
 (package-initialize) ;; You might already have this line
 (load-theme 'wombat t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
-(load-theme 'sanityinc-tomorrow-eighties t)
+(load-theme 'sanityinc-tomorrow-night t)
  ;; REMOVE FUCKING BELL SHIT
 (setq ring-bell-function 'ignore)
 
