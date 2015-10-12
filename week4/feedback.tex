@@ -1,0 +1,117 @@
+\documentclass[a4paper]{article}
+
+% Import some useful packages
+\usepackage[margin=0.5in]{geometry} % narrow margins
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\definecolor{LightGray}{gray}{0.95}
+
+\title{Peer-review of assignment 4 for \textit{INF3331-Yrjan}}
+\author{Andreas Schafferer, Git-repo INF3331-HaakonAndreas, {haakoasc@student.matnat.uio.no} \\
+ 		Anders Aase, {anders.aase91@gmail.com} \\
+		Gorm Lundestad, {gorml@student.matnat.uio.no }}
+\date{Deadline: Tuesday, 13. October 2015, 23:59:59.}
+
+\begin{document}
+\maketitle
+
+
+
+\
+
+\section{Review}\label{sec:review}
+
+The assignment was tested using Python 2.7 on OSX El Capitan.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Assignment 4.1: Retrieve web page}
+Very nice and short function, does excactly what it's supposed to do.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Assignment 4.2: Find link to location}
+Very good function, clean and easy to read. I especially like how you concatinate different parts of the regex, instead of having multiple long regexes for stadnamn, kommune and fylke. \newline\newline
+The code finds kommune, stadnamn, fylke and wildcards excatly as it's supposed to. Well done!\newline\newline
+If i have to suggest some changes, i would consider turning these simple if and else statements into single lines, see below:
+
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
+#Change from
+if location:
+        # Escape the user given string and replace wildcards with .*
+        search = re.sub("\\\\\*", "(?:\S| )*", re.escape(location))
+    else:
+        # Wildcard if there's no location string.
+        search = r"(?:\S| )*"
+
+#to:
+# Escape the user given string and replace wildcards with .*
+# Wildcard if there's no location string.
+if location: search = re.sub("\\\\\*", "(?:\S| )*", re.escape(location))
+else: search = r"(?:\S| )*" 
+\end{minted}
+\newline
+This is of course highly subjective, and up to each programmers preferences, but i personally find it cleaner and simpler to read.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Assignment 4.3: Retrieve weather information}
+Again, very nice function. I really like your use of named tuples, i did not know that module.
+Like above, if i have to suggest changes, it would be shortening the code, see below:
+
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
+if not name_match:
+        sys.stderr.write("Failed to parse data from URL: {}\n".format(url))
+        return None
+    else:
+        name = name_match.group(1)"
+#The above else statement is excessive, because of the return-statement in the if-sentence.
+
+if not name_match:
+        sys.stderr.write("Failed to parse data from URL: {}\n".format(url))
+        return None
+name = name_match.group(1)"
+\end{minted}
+\newline
+Again, this is my subjective, personal preference. I'm sure you are already aware of this.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Assignment 4.4: Buffer all internet activity}
+Real nice buffer! I really like how you save all the files to disk using the url as filename. I'm only a little concerned about the performance when you write to disk every time you fetch a new URL, I think this can slow down the program. Could it be an idea to write a function that saves all the files to disk after you have done a huge number of retrievals?
+\newline
+The buffer works perfectly, well done!
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Assignment 4.5: Create weather forecast}
+This task is working just as expected. Handles none asci-charcters nicely. Really good documentation, and sensible variable names. I like how you implemented the execution of the program with the \newline
+\begin{minted}[bgcolor=LightGray, linenos, fontsize=\footnotesize]{python}
+if __name__ == "__main__":
+\end{minted}
+statement. It's easy to test and use.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Assignment 4.6: Testing the code}
+All py.test passes, and rigorous tests. All doctests passes.
+Real good and rigid solution in "test\_buffer\_timestamp", i'm impressed!
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Assignment 4.7: Extreme places in Norway}
+Works like a charm. Simple and easy to understand.
+
+
+\subsection{Advice and comments}
+Very nice solution, real good and easy to understand, thanks to good use of docstrings and useful comment and descriptive variable names. I'm real impressed by your implementation, it was a joy going reviewing the assignment. \newline
+The only improvement i could think of would be changing the buffer, so it doesn't write to disk after each retrieval as mentioned above, but this has no impact on the score. 
+\section{Estimated points}\label{sec:points}
+Perfect assignment, 30 of 30 points!
+
+
+\bibliographystyle{plain}
+\bibliography{literature}
+
+\end{document}
