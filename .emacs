@@ -8,6 +8,19 @@
 
 ; Stop Emacs from losing undo information by
 ; setting very high limits for undo buffers
+
+(setq package-list '(
+		     color-theme
+		     color-theme-sanityinc-tomorrow
+		     color-theme-sanityinc-solarized
+		     color-theme-solarized
+		     solarized-theme
+		     dash
+		     nasm-mode
+		     smex
+		     gitignore-mode
+		     ))
+
 (setq undo-limit 20000000)
 (setq undo-strong-limit 40000000)
 
@@ -678,9 +691,29 @@ point."
                                  (char-equal (char-syntax cb) ?\) )
                                  (blink-matching-open))))
         (when matching-text (message matching-text))))
+
+
+
+
+(package-initialize)
+
+; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+;; smex
+(require 'smex)
+(global-set-key (kbd "M-x") 'smex)
+;;(global-set-key (kbd "M-x") 'smex-major-mode-commands)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+

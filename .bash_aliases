@@ -12,6 +12,8 @@ alias untar='tar -xzf'
 # gnome
 alias gopen='gnome-open'
 
+# intelij
+alias idea15='/home/anders/Software/idea-IU-143.249.6/bin/idea.sh > /dev/null 2>&1'
 
 # shell
 alias listalias='cat ~/.bash_aliases'
