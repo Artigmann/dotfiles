@@ -254,13 +254,6 @@
      (upcase-region (mark) (point))
      (pop-mark)
      (insert "_H)\n")
-     ;(insert "/* ========================================================================\n")
-     ;(insert "   $File: $\n")
-     ;(insert "   $Date: $\n")
-     ;(insert "   $Revision: $\n")
-     ;(insert "   $Creator: Casey Muratori $\n")
-     ;(insert "   $Notice: (C) Copyright 2015 by Molly Rocket, Inc. All Rights Reserved. $\n")
-     ;(insert "   ======================================================================== */\n")
      (insert "\n")
      (insert "#define ")
      (push-mark)
@@ -269,21 +262,8 @@
      (pop-mark)
      (insert "_H\n")
      (insert "#endif")
-  )
-
-;  (defun casey-source-format ()
-;     "Format the given file as a source file."
-;     (interactive)
-;     (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
-;     (insert "/* ========================================================================\n")
-;     (insert "   $File: $\n")
-;     (insert "   $Date: $\n")
-;     (insert "   $Revision: $\n")
-;     (insert "   $Creator: Casey Muratori $\n")
-;     (insert "   $Notice: (C) Copyright 2015 by Molly Rocket, Inc. All Rights Reserved. $\n")
-;     (insert "   ======================================================================== */\n")
-;  )
-
+     )
+  
   (cond ((file-exists-p buffer-file-name) t)
         ((string-match "[.]hin" buffer-file-name) (casey-source-format))
         ((string-match "[.]cin" buffer-file-name) (casey-source-format))
@@ -323,7 +303,7 @@
 
   (define-key c++-mode-map "\es" 'casey-save-buffer)
 
-  ;  (define-key c++-mode-map "\t" 'my-tab-fix)
+  ;  (Define-Key C++-Mode-Map "\T" 'My-tab-fix)
   (define-key c++-mode-map [S-tab] 'indent-for-tab-command)
   (define-key c++-mode-map "\C-y" 'indent-for-tab-command)
   (define-key c++-mode-map [C-tab] 'indent-region)
@@ -670,13 +650,13 @@ point."
 (defun my-tab-fix ()
     (local-set-key [tab] 'indent-or-expand))
   
+(add-hook 'c++-mode-common-hook          'my-tab-fix)
   (add-hook 'c++-mode-hook          'my-tab-fix)
   (add-hook 'sh-mode-hook         'my-tab-fix)
   (add-hook 'emacs-lisp-mode-hook 'my-tab-fix)
   (add-hook 'c-mode-hook          'my-tab-fix)
   (add-hook 'java-mode-hook          'my-tab-fix)
   (add-hook 'python-mode-hook          'my-tab-fix)
-  (add-hook 'text-mode-hook          'my-tab-fix)
 
 (set-foreground-color "#D3D7CF")
   
