@@ -1,18 +1,18 @@
-; garbagecolector shit
+                                        ; garbagecolector shit
 (setq-default gc-cons-threshold 10000000)
 
 
 (setq package-list '(
-		     color-theme
-		     color-theme-sanityinc-tomorrow
-		     color-theme-sanityinc-solarized
-		     color-theme-solarized
-		     solarized-theme
-		     dash
-		     nasm-mode
-		     smex
-		     gitignore-mode
-		     ))
+                     color-theme
+                     color-theme-sanityinc-tomorrow
+                     color-theme-sanityinc-solarized
+                     color-theme-solarized
+                     solarized-theme
+                     dash
+                     nasm-mode
+                     smex
+                     gitignore-mode
+                     ))
 
 (setq undo-limit 20000000)
 (setq undo-strong-limit 40000000)
@@ -27,20 +27,21 @@
 
 (scroll-bar-mode -1)
 (tool-bar-mode 0)
-
+(blink-cursor-mode 0)
+(menu-bar-mode 0)
 
 (setq shift-select-mode nil)
 (setq enable-local-variables nil)
 
-(when casey-win32 
+(when casey-win32
   (setq casey-makescript "build.bat")
-)
+  )
 
 
 (when casey-linux
   (setq casey-makescript "./build.linux")
   (display-battery-mode 1)
-)
+  )
 
 (load-library "view")
 (require 'cc-mode)
@@ -48,47 +49,47 @@
 (require 'compile)
 (ido-mode t)
 
-; Setup my find-files
+                                        ; Setup my find-files
 (define-key global-map "\ef" 'find-file)
 (define-key global-map "\eF" 'find-file-other-window)
 
 (global-set-key (read-kbd-macro "\eb")  'ido-switch-buffer)
 (global-set-key (read-kbd-macro "\eB")  'ido-switch-buffer-other-window)
 
-; Turn off the bell on Mac OS X
+                                        ; Turn off the bell on Mac OS X
 (defun nil-bell ())
 (setq ring-bell-function 'nil-bell)
 
-; compile
+                                        ; compile
 (defun casey-big-fun-compilation-hook ()
   (make-local-variable 'truncate-lines)
   (setq truncate-lines nil)
-)
+  )
 
 (add-hook 'compilation-mode-hook 'casey-big-fun-compilation-hook)
 
 (defun insert-timeofday ()
-   (interactive "*")
-   (insert (format-time-string "---------------- %a, %d %b %y: %I:%M%p")))
+  (interactive "*")
+  (insert (format-time-string "---------------- %a, %d %b %y: %I:%M%p")))
 
-; Bright-red TODOs
- (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode java-mode python-mode))
- (make-face 'font-lock-fixme-face)
- (make-face 'font-lock-study-face)
- (make-face 'font-lock-important-face)
- (make-face 'font-lock-note-face)
- (mapc (lambda (mode)
-	 (font-lock-add-keywords
-	  mode
-	  '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
-	    ("\\<\\(STUDY\\)" 1 'font-lock-study-face t)
-	    ("\\<\\(IMPORTANT\\)" 1 'font-lock-important-face t)
-            ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
-	fixme-modes)
- (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
- (modify-face 'font-lock-study-face "Yellow" nil nil t nil t nil nil)
- (modify-face 'font-lock-important-face "Yellow" nil nil t nil t nil nil)
- (modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
+                                        ; Bright-red TODOs
+(setq fixme-modes '(c++-mode c-mode emacs-lisp-mode java-mode python-mode))
+(make-face 'font-lock-fixme-face)
+(make-face 'font-lock-study-face)
+(make-face 'font-lock-important-face)
+(make-face 'font-lock-note-face)
+(mapc (lambda (mode)
+        (font-lock-add-keywords
+         mode
+         '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
+           ("\\<\\(STUDY\\)" 1 'font-lock-study-face t)
+           ("\\<\\(IMPORTANT\\)" 1 'font-lock-important-face t)
+           ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+      fixme-modes)
+(modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
+(modify-face 'font-lock-study-face "Yellow" nil nil t nil t nil nil)
+(modify-face 'font-lock-important-face "Yellow" nil nil t nil t nil nil)
+(modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
 
 
 (setq auto-mode-alist
@@ -110,7 +111,7 @@
          ("\\.mm$" . objc-mode)
          ) auto-mode-alist))
 
-; c++ indent style
+                                        ; c++ indent style
 (defconst casey-big-fun-c-style
   '((c-electric-pound-behavior   . nil)
     (c-tab-always-indent         . t)
@@ -153,41 +154,47 @@
                                     (brace-list-open       .  0)
                                     (brace-list-intro      .  4)))
     (c-echo-syntactic-information-p . t))
-    "Casey's Big Fun C++ Style")
+  "Casey's Big Fun C++ Style")
 
 (defun casey-big-fun-c-hook ()
   (c-add-style "BigFun" casey-big-fun-c-style t)
 
-  ; 4-space tabs
+                                        ;;; Handle super-tabbify (TAB completes, shift-TAB actually tabs)
+  (setq dabbrev-case-replace t)
+  (setq dabbrev-case-fold-search t)
+  (setq dabbrev-upcase-means-case-search t)
+  (abbrev-mode 1)
+
+                                        ; 4-space tabs
   (setq tab-width 4
         indent-tabs-mode nil)
 
-   ; Additional style stuff
+                                        ; Additional style stuff
   (c-set-offset 'member-init-intro '++)
-  
+
   (c-toggle-auto-hungry-state -1)
   (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
 
   (defun casey-header-format ()
-     "Format the given file as a header file."
-     (interactive)
-     (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
-     (insert "#if !defined(")
-     (push-mark)
-     (insert BaseFileName)
-     (upcase-region (mark) (point))
-     (pop-mark)
-     (insert "_H)\n")
-     (insert "\n")
-     (insert "#define ")
-     (push-mark)
-     (insert BaseFileName)
-     (upcase-region (mark) (point))
-     (pop-mark)
-     (insert "_H\n")
-     (insert "#endif")
-     )
-  
+    "Format the given file as a header file."
+    (interactive)
+    (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
+    (insert "#if !defined(")
+    (push-mark)
+    (insert BaseFileName)
+    (upcase-region (mark) (point))
+    (pop-mark)
+    (insert "_H)\n")
+    (insert "\n")
+    (insert "#define ")
+    (push-mark)
+    (insert BaseFileName)
+    (upcase-region (mark) (point))
+    (pop-mark)
+    (insert "_H\n")
+    (insert "#endif")
+    )
+
   (cond ((file-exists-p buffer-file-name) t)
         ((string-match "[.]hin" buffer-file-name) (casey-source-format))
         ((string-match "[.]cin" buffer-file-name) (casey-source-format))
@@ -200,18 +207,18 @@
     (setq CorrespondingFileName nil)
     (setq BaseFileName (file-name-sans-extension buffer-file-name))
     (if (string-match "\\.c" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".h")))
+        (setq CorrespondingFileName (concat BaseFileName ".h")))
     (if (string-match "\\.h" buffer-file-name)
-       (if (file-exists-p (concat BaseFileName ".c")) (setq CorrespondingFileName (concat BaseFileName ".c"))
-	   (setq CorrespondingFileName (concat BaseFileName ".cpp"))))
+        (if (file-exists-p (concat BaseFileName ".c")) (setq CorrespondingFileName (concat BaseFileName ".c"))
+          (setq CorrespondingFileName (concat BaseFileName ".cpp"))))
     (if (string-match "\\.hin" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".cin")))
+        (setq CorrespondingFileName (concat BaseFileName ".cin")))
     (if (string-match "\\.cin" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".hin")))
+        (setq CorrespondingFileName (concat BaseFileName ".hin")))
     (if (string-match "\\.cpp" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".h")))
+        (setq CorrespondingFileName (concat BaseFileName ".h")))
     (if CorrespondingFileName (find-file CorrespondingFileName)
-       (error "Unable to find a corresponding file")))
+      (error "Unable to find a corresponding file")))
   (defun casey-find-corresponding-file-other-window ()
     "Find the file that corresponds to this one."
     (interactive)
@@ -219,25 +226,25 @@
     (casey-find-corresponding-file)
     (other-window -1))
 
-  ; open header
+                                        ; open header
   (define-key c++-mode-map "\eh" 'casey-find-corresponding-file)
   (define-key c++-mode-map "\eH" 'casey-find-corresponding-file-other-window)
 
   (define-key c++-mode-map "\ej" 'imenu)
 
-    (add-to-list 'compilation-error-regexp-alist 'casey-devenv)
+  (add-to-list 'compilation-error-regexp-alist 'casey-devenv)
   (add-to-list 'compilation-error-regexp-alist-alist '(casey-devenv
-   "*\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:see declaration\\|\\(?:warnin\\(g\\)\\|[a-z ]+\\) C[0-9]+:\\)"
-    2 3 nil (4)))
-  
-  
-)
+                                                       "*\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:see declaration\\|\\(?:warnin\\(g\\)\\|[a-z ]+\\) C[0-9]+:\\)"
+                                                       2 3 nil (4)))
+
+
+  )
 
 (add-hook 'c-mode-common-hook 'casey-big-fun-c-hook)
 
-					; TXT mode handling
+                                        ; TXT mode handling
 (defun casey-big-fun-text-hook ()
-					; 4-space tabs
+                                        ; 4-space tabs
   (setq tab-width 4
         indent-tabs-mode nil)
 
@@ -248,7 +255,7 @@
 
 
 
-					; Window Commands
+                                        ; Window Commands
 (defun w32-restore-frame ()
   "Restore a minimized frame"
   (interactive)
@@ -278,18 +285,18 @@
 (define-key global-map "" 'copy-region-as-kill)
 (define-key global-map "" 'yank)
 
-; Compilation
+                                        ; Compilation
 (setq compilation-context-lines 0)
 (setq compilation-error-regexp-alist
-    (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
-     compilation-error-regexp-alist))
+      (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
+            compilation-error-regexp-alist))
 
 (defun find-project-directory-recursive ()
   "Recursively search for a makefile."
   (interactive)
   (if (file-exists-p casey-makescript) t
-      (cd "../")
-      (find-project-directory-recursive)))
+    (cd "../")
+    (find-project-directory-recursive)))
 
 (defun lock-compilation-directory ()
   "The compilation process should NOT hunt for a makefile"
@@ -309,9 +316,9 @@
   (setq find-project-from-directory default-directory)
   (switch-to-buffer-other-window "*compilation*")
   (if compilation-directory-locked (cd last-compilation-directory)
-  (cd find-project-from-directory)
-  (find-project-directory-recursive)
-  (setq last-compilation-directory default-directory)))
+    (cd find-project-from-directory)
+    (find-project-directory-recursive)
+    (setq last-compilation-directory default-directory)))
 
 (defun make-without-asking ()
   "Make the current build."
@@ -321,19 +328,19 @@
 (define-key global-map "\em" 'make-without-asking)
 
 
-; Commands
+                                        ; Commands
 (set-variable 'grep-command "grep -irHn ")
 (when casey-win32
-    (setq grep-use-null-device t)
-    (set-variable 'grep-command "findstr -s -n -i -l "))
+  (setq grep-use-null-device t)
+  (set-variable 'grep-command "findstr -s -n -i -l "))
 
-; Smooth scroll
+                                        ; Smooth scroll
 (setq scroll-step 3)
 
-; Clock
+                                        ; Clock
 (display-time)
 
-; Startup windowing
+                                        ; Startup windowing
 (setq next-line-add-newlines nil)
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows nil)
@@ -363,7 +370,7 @@
 
 (defun casey-never-split-a-window
     "Never, ever split a window.  Why would anyone EVER want you to do that??"
-    nil)
+  nil)
 (setq split-window-preferred-function 'casey-never-split-a-window)
 
 
@@ -378,7 +385,7 @@
 (load-theme 'wombat t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
 (load-theme 'sanityinc-tomorrow-night t)
- ;; REMOVE FUCKING BELL SHIT
+;; REMOVE FUCKING BELL SHIT
 (setq ring-bell-function 'ignore)
 
 ;; FUCK OFF IDO SEARCH FUCTION
@@ -386,26 +393,26 @@
 
 
 (set-foreground-color "#D3D7CF")
-  
-  (defadvice show-paren-function
-      (after show-matching-paren-offscreen activate)
-      "If the matching paren is offscreen, show the matching line in the
+
+(defadvice show-paren-function
+    (after show-matching-paren-offscreen activate)
+  "If the matching paren is offscreen, show the matching line in the
         echo area. Has no effect if the character before point is not of
         the syntax class ')'."
-      (interactive)
-      (let* ((cb (char-before (point)))
-             (matching-text (and cb
-                                 (char-equal (char-syntax cb) ?\) )
-                                 (blink-matching-open))))
-        (when matching-text (message matching-text))))
+  (interactive)
+  (let* ((cb (char-before (point)))
+         (matching-text (and cb
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
+    (when matching-text (message matching-text))))
 
 (package-initialize)
 
-; fetch the list of packages available 
+                                        ; fetch the list of packages available
 (unless package-archive-contents
   (package-refresh-contents))
 
-; install the missing packages
+                                        ; install the missing packages
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
@@ -422,3 +429,27 @@
 
 (define-key global-map [C-tab] 'iwb)
 
+(define-key global-map "\t" 'dabbrev-expand)
+
+(defun indent-or-expand (arg)
+  "Either indent according to mode, or expand the word preceding
+point."
+  (interactive "*P")
+  (if (and
+       (or (bobp) (= ?w (char-syntax (char-before))))
+       (or (eobp) (not (= ?w (char-syntax (char-after))))))
+      (dabbrev-expand arg)
+    (indent-according-to-mode)))
+
+
+(defun my-tab-fix ()
+  (local-set-key [tab] 'indent-or-expand))
+
+(add-hook 'c++-mode-common-hook          'my-tab-fix)
+(add-hook 'c++-mode-hook          'my-tab-fix)
+(add-hook 'sh-mode-hook         'my-tab-fix)
+(add-hook 'emacs-lisp-mode-hook 'my-tab-fix)
+(add-hook 'c-mode-hook          'my-tab-fix)
+(add-hook 'java-mode-hook          'my-tab-fix)
+(add-hook 'python-mode-hook          'my-tab-fix)
+(add-hook 'text-mode 'my-tab-fix)
