@@ -1,3 +1,4 @@
 *.pyc
 *.tar
 *.tar.gz
+week4/weatherbuf/*
