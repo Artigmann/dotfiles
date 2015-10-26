@@ -6,7 +6,7 @@ from scipy import weave
 from heat_equation import heat_equation_plot
 
 
-def heat_equation_weave(t0, t1, dt, n, m, u, f, nu):
+def heat_equation_weave(t0, t1, dt, n, m, u, f, nu, verbose=False):
     """
     Solves heat equation where t0 is start time, t1 is end time,
     dt is time step, n is rectangle is rectangle width, m is rectangle height,
@@ -17,6 +17,8 @@ def heat_equation_weave(t0, t1, dt, n, m, u, f, nu):
     Note that this function is destructive and will manipulate the given u
     argument.
     """
+    if verbose:
+        print "Solving with weave (C-based) heat equation solver."
     # Do some type conversions to ensure the C code will run nicely.
     t0 = float(t0)
     t1 = float(t1)
