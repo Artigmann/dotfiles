@@ -21,7 +21,6 @@ def heat_equation(t0, t1, dt, n, m, u, f, nu, verbose=False):
     while t < t1:
         # Init u_n to zero.
         u_n = [([0] * n) for _ in xrange(m)]
-        # u_n = [[0] * n] * m
         for i in xrange(1, m-1):
             for j in xrange(1, n-1):
                 u_n[i][j] = u[i][j] \

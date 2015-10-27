@@ -99,6 +99,7 @@ elif args.solver == "weave":
 # Create f.
 f = np.zeros((m, n)) + args.f
 
+
 if args.time:
     # Time stuff, we only import the timeit module here if we actually need it.
     from timeit import Timer
@@ -112,6 +113,7 @@ if args.time:
         print "All run times:"
         print times
     print "Best running time in 3 runs were {} seconds.".format(min(times))
+
 
 # Plot, magic happens here.
 u = he.heat_equation_plot(args.t0, args.t1, args.dt, n, m, u, f, args.nu,
