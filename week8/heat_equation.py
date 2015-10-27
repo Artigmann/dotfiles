@@ -41,7 +41,8 @@ def heat_equation_plot(t0, t1, dt, n, m, u, f, nu, solver_func=heat_equation,
     u are the initial values (as a n x m list), f is the heat source function
     (also a n x m list), nu is thermal diffusivity, solver_func is the
     solver function you want to use, verbose gives verbose output,
-    save_to is a file handle to save the file to.
+    save_to is a file handle to save the file to. Returns the solved
+    heat_equation.
 
     Note that this function is destructive and will manipulate the given u
     argument.
