@@ -1,13 +1,10 @@
 \documentclass[]{article}
-%\usepackage{amsmath}
-%\usepackage{amssymb}
 \usepackage[utf8]{inputenc}
-%\usepackage{color}
 
 
 %opening
 \title{Report week 8 - INF3331}
-\author{Yrjan Skrimstad}
+\author{Yrjan Skrimstad (yrjansk)}
 
 \begin{document}
 \maketitle
@@ -21,6 +18,8 @@
 		of inline C.
 	\item heat\_equation\_ui.py: Contains the user interface for the heat
 		equation solver.
+	\item test\_heat\_equation.py: Contains the tests.
+	\item report.tex: The report you're reading right now.
 \end{itemize}
 \subsection{Details}
 \textbf{heat\_equation.py:}
@@ -38,18 +37,25 @@ Fairly simple solver called \textbf{heat\_equation\_numpy()}. The
 solver uses vectorization and is therefore quite a lot faster than the
 python-version.\\
 
-\noindent\textbf{heat\_equation\_weave.py}
+\noindent\textbf{heat\_equation\_weave.py:}
 Contains the fastest solver I've written, \\\textbf{heat\_equation\_weave()}.
 This solver is written with inline C and pointer swapping to avoid unnecessary
 copying of the data. There's several type conversions to make sure the inline
 C-code behaves as expected. The C code returns a boolean to tell us which array
 is currently the new array, this is necessary because of the pointer swapping.\\
 
-\noindent\textbf{heat\_equation\_ui.py}
+\noindent\textbf{heat\_equation\_ui.py:}
 Contains a user interface for solving and plotting equations. This is written as
 a fairly basic python script without unnecessary functions and other fanciness.
 It supports quite a few options, run the script with the \emph{-h} flag to see
-them.
+them.\\
+
+\noindent\textbf{test\_heat\_equation.py:}
+Contains two tests. One test for testing if the solver is within the error
+specified by the assignment text. And another test to test if the error
+decreases as size increases. To run the tests run `py.test` in the folder of the
+assignment. \textbf{Note:} This requires \textbf{py.test} to be installed on
+the system.
 
 
 \section{Runtime comparison}

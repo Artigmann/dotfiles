@@ -7,6 +7,10 @@ from math import sin, pi
 
 
 def test_heat_equation_weave_err():
+    """
+    Tests if the error of the heat equation solver is within the range given by
+    the assignment.
+    """
     t0 = 0
     t1 = 1000
     dt = 0.1
@@ -15,14 +19,14 @@ def test_heat_equation_weave_err():
     nu = 1.
     u = np.zeros((m, n))
 
-    # Set f, yes they switched n and m around.
+    # Set f, according to the formula.
     f = np.empty((m, n))
     for i in xrange(n):
         for j in xrange(m):
             f[j, i] = nu*((2*pi/(m-1))**2 + (2*pi/(n-1))**2) \
                       * sin(2*pi/(n-1)*i)*sin(2*pi/(m-1)*j)
 
-    # Set analytic_u, yes they switched n and m around.
+    # Set analytic_u, according to the formula.
     analytic_u = np.empty((m, n))
     for i in xrange(n):
         for j in xrange(m):
@@ -36,6 +40,11 @@ def test_heat_equation_weave_err():
 
 
 def test_heat_equation_weave_decrease():
+    """
+    Tests if the error of the heat equation solver decreases as we increase
+    the size of the rectangle. To get this to work properly I had to increase
+    the end-time, as suggested by Simon Funke on Piazza.
+    """
     # Common initial values.
     t0 = 0
     t1 = 2000
