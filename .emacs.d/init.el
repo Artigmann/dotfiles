@@ -270,9 +270,9 @@
 (define-key global-map "\ep" 'quick-calc)
 (define-key global-map "\ew" 'other-window)
 
-(define-key global-map [f9] 'first-error)
-(define-key global-map [f10] 'previous-error)
-(define-key global-map [f11] 'next-error)
+;(define-key global-map [f9] 'first-error)
+;(define-key global-map [f10] 'previous-error)
+;(define-key global-map [f11] 'next-error)
 
 (define-key global-map "\en" 'next-error)
 (define-key global-map "\eN" 'previous-error)
@@ -383,16 +383,14 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize) ;; You might already have this line
 (load-theme 'wombat t)
-;; (load-theme 'sanityinc-tomorrow-night t)
 (load-theme 'sanityinc-tomorrow-night t)
+
 ;; REMOVE FUCKING BELL SHIT
 (setq ring-bell-function 'ignore)
 
 ;; FUCK OFF IDO SEARCH FUCTION
 (setq ido-auto-merge-work-directories-length -1)
 
-
-(set-foreground-color "#D3D7CF")
 
 (defadvice show-paren-function
     (after show-matching-paren-offscreen activate)
@@ -453,3 +451,7 @@ point."
 (add-hook 'java-mode-hook          'my-tab-fix)
 (add-hook 'python-mode-hook          'my-tab-fix)
 (add-hook 'text-mode 'my-tab-fix)
+
+
+(set-foreground-color "#BABDB6")
+(set-background-color "#002B36")
