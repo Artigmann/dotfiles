@@ -59,7 +59,7 @@
                                         ; Turn off the bell on Mac OS X
 (defun nil-bell ())
 (setq ring-bell-function 'nil-bell)
-
+(show-paren-mode 1)
                                         ; compile
 (defun casey-big-fun-compilation-hook ()
   (make-local-variable 'truncate-lines)
