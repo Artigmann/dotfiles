@@ -1,0 +1,86 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+
+
+%opening
+\title{Report week 8 - INF3331}
+\author{Yrjan Skrimstad (yrjansk)}
+
+\begin{document}
+\maketitle
+\section{Implementation}
+\subsection{Files}
+\begin{itemize}
+	\item heat\_equation.py: Contains the basic python solver and the plotting
+		function.
+	\item heat\_equation\_numpy.py: Contains the numpy solver.
+	\item heat\_equation\_weave.py: Contains the weave solver written with use
+		of inline C.
+	\item heat\_equation\_ui.py: Contains the user interface for the heat
+		equation solver.
+	\item test\_heat\_equation.py: Contains the tests.
+	\item report.tex: The report you're reading right now.
+\end{itemize}
+\subsection{Details}
+\textbf{heat\_equation.py:}
+Contains the basic solver \textbf{heat\_equation()}. This is simply a solver
+that iterates through the timesteps and executes the given function for every
+single point in the array.
+
+The plotting function \textbf{heat\_equation\_plot()}
+is a fairly simple plotting function that takes the equation parameters and
+calls the given solver (it defaults to the basic python solver) to solve the
+equation and then plots the data.\\
+
+\noindent\textbf{heat\_equation\_numpy.py:}
+Fairly simple solver called \textbf{heat\_equation\_numpy()}. The
+solver uses vectorization and is therefore quite a lot faster than the
+python-version.\\
+
+\noindent\textbf{heat\_equation\_weave.py:}
+Contains the fastest solver I've written, \\\textbf{heat\_equation\_weave()}.
+This solver is written with inline C and pointer swapping to avoid unnecessary
+copying of the data. There's several type conversions to make sure the inline
+C-code behaves as expected. The C code returns a boolean to tell us which array
+is currently the new array, this is necessary because of the pointer swapping.\\
+
+\noindent\textbf{heat\_equation\_ui.py:}
+Contains a user interface for solving and plotting equations. This is written as
+a fairly basic python script without unnecessary functions and other fanciness.
+It supports quite a few options, run the script with the \emph{-h} flag to see
+them.\\
+
+\noindent\textbf{test\_heat\_equation.py:}
+Contains two tests. One test for testing if the solver is within the error
+specified by the assignment text. And another test to test if the error
+decreases as size increases. To run the tests run `py.test` in the folder of the
+assignment. \textbf{Note:} This requires \textbf{py.test} to be installed on
+the system.
+
+
+\section{Runtime comparison}
+\subsection{Test system}
+Debian Linux - Python 2.7.10 - Intel i5-2450M CPU @ 2.50GHz - 8GB RAM
+\subsection{Timings}
+These timings are taken from runs with the example data as given by the
+assignment text. \\
+\begin{tabular}{| c | c |}
+	\hline
+	Time in seconds & Solver implementation \\
+	\hline
+	77.510 & Python \\
+	1.082 & NumPy \\
+	0.217 & Weave, inline C \\
+	\hline
+\end{tabular} \\
+We here see that the pure Python-implementation is definitely the slowest, it's
+actually slower than the inline C-implementation by a factor of almost 400. This
+makes it practically unusably slow in a lot of situations.
+
+The NumPy-implementation is quite fast, and actually usably fast. However it's
+still a lot slower than the inline C-implementation.
+
+The Weave/inline C-implementation is definitely the fastest. It's a lot faster
+than the other implementations and would therefore be recommended for use with
+any larger datasets.
+\end{document}
