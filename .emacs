@@ -599,9 +599,10 @@
 (set-face-attribute 'font-lock-keyword-face nil :foreground "DarkGoldenrod3")
 (set-face-attribute 'font-lock-keyword-face nil :weight 'bold)
 (set-face-attribute 'font-lock-string-face nil :foreground "olive drab")
-(set-face-attribute 'font-lock-type-face nil :foreground "sandy brown")
+(set-face-attribute 'font-lock-type-face nil :foreground "burlywood3")
+;(set-face-attribute 'font-lock-type-face nil :foreground "sandy brown")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "burlywood3")
-(set-face-attribute 'font-lock-preprocessor-face nil :foreground "light gray")
+(set-face-attribute 'font-lock-preprocessor-face nil :foreground "sandy brown")
 
 
 ; Anders Shit
