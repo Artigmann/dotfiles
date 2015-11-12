@@ -118,7 +118,7 @@
 (global-unset-key [mouse-2])
 
 ; Bright-red TODOs
- (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+ (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode python-mode java-mode))
  (make-face 'font-lock-fixme-face)
  (make-face 'font-lock-study-face)
  (make-face 'font-lock-important-face)
@@ -585,23 +585,23 @@
   (interactive)
   (menu-bar-mode -1)
   (maximize-frame)
-  (set-foreground-color "burlywood3")
+  (set-foreground-color "DarkSeaGreen4")
   (set-background-color "#161616")
   (set-cursor-color "#40FF40")
 )
 (add-hook 'window-setup-hook 'post-load-stuff t)
 
 (set-face-attribute 'font-lock-builtin-face nil :foreground "#DAB98F")
-(set-face-attribute 'font-lock-comment-face nil :foreground "gray50")
-(set-face-attribute 'font-lock-constant-face nil :foreground "olive drab")
-(set-face-attribute 'font-lock-doc-face nil :foreground "gray50")
-(set-face-attribute 'font-lock-function-name-face nil :foreground "burlywood3")
+(set-face-attribute 'font-lock-comment-face nil :foreground "steel blue")
+(set-face-attribute 'font-lock-constant-face nil :foreground "SeaGreen3")
+(set-face-attribute 'font-lock-doc-face nil :foreground "steel blue")
+(set-face-attribute 'font-lock-function-name-face nil :foreground "DarkSeaGreen4")
 (set-face-attribute 'font-lock-keyword-face nil :foreground "DarkGoldenrod3")
 (set-face-attribute 'font-lock-keyword-face nil :weight 'bold)
-(set-face-attribute 'font-lock-string-face nil :foreground "olive drab")
-(set-face-attribute 'font-lock-type-face nil :foreground "burlywood3")
+(set-face-attribute 'font-lock-string-face nil :foreground "green yellow")
+(set-face-attribute 'font-lock-type-face nil :foreground "DarkSeaGreen4")
 ;(set-face-attribute 'font-lock-type-face nil :foreground "sandy brown")
-(set-face-attribute 'font-lock-variable-name-face nil :foreground "burlywood3")
+(set-face-attribute 'font-lock-variable-name-face nil :foreground "DarkSeaGreen4")
 (set-face-attribute 'font-lock-preprocessor-face nil :foreground "sandy brown")
 
 
@@ -637,5 +637,5 @@
 (setq inhibit-startup-screen t)
 
 (show-paren-mode 1)
-(set-foreground-color "#BABDB6")
-(set-background-color "#002B36")
+;(set-foreground-color "#BABDB6")
+;(set-background-color "#002B36")
